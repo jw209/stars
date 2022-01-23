@@ -25,8 +25,10 @@ knn.fit(X,y)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.25, random_state=42)
 
 knn.fit(X_train, y_train)
+score=knn.score(X_test, y_test)
+print("Accuracy:", "{:.0%}".format(round(score,2)))
 
-print(knn.score(X_test, y_test))
+
 
 k_range = range(1, 20)
 scores = []
