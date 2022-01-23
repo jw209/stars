@@ -9,6 +9,13 @@ from sklearn.preprocessing import LabelEncoder
 stars = pd.read_csv('Stars.csv')
 stars.head()
 
+print("Total number of attributes:", stars.shape[1], "\n")
+print("Data set attributes: ")
+print(list(stars.columns))
+print("\n")
+
+
+
 le = LabelEncoder()
 le.fit(stars.Color)
 stars['Color_label'] = le.transform(stars.Color)
