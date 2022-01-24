@@ -1,8 +1,7 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
-from matplotlib import cm
-from pandas.plotting import scatter_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
@@ -20,13 +19,15 @@ y = stars['Type']
 
 knn = KNeighborsClassifier(n_neighbors=3)
 
-knn.fit(X,y)
+knn.fit(X, y)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.25, random_state=42)
 
 knn.fit(X_train, y_train)
 
 print(knn.score(X_test, y_test))
+
+print(stars['Color'].unique())
 
 k_range = range(1, 20)
 scores = []
@@ -36,21 +37,15 @@ for k in k_range:
     knn.fit(X_train, y_train)
     scores.append(knn.score(X_test, y_test))
 
-cmap = cm.get_cmap('gnuplot')
-scatter = scatter_matrix(X, c=y, marker='o', s=40, hist_kwds={'bins': 15}, figsize=(9, 9), cmap=cmap)
+plt.style.use('_mpl-gallery')
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.scatter(X['Temperature'], X['L'], X['R'], c=y, marker='o', s=100)
+fig, ax = plt.subplots()
+fig1, bx = plt.subplots()
 
-ax.set_xlabel('Temperature')
-ax.set_ylabel('L')
-ax.set_zlabel('R')
+bx.bar(stars['Type'].unique(), len(stars['Type'].unique()), width=1, edgecolor="white", linewidth=0.7)
 
-plt.figure()
-plt.xlabel('k')
-plt.ylabel('accuracy')
-plt.scatter(k_range, scores)
-plt.xticks([0, 5, 10, 15, 20])
+# temperature and color scatter plot
+ax.scatter(stars['Temperature'], stars['Color'])
+plt.gcf().subplots_adjust(bottom=0.15, left=0.15)
 
 plt.show()
