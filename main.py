@@ -8,6 +8,13 @@ from sklearn.preprocessing import LabelEncoder
 stars = pd.read_csv('Stars.csv')
 stars.head()
 
+print("Total number of attributes:", stars.shape[1], "\n")
+print("Data set attributes: ")
+print(list(stars.columns))
+print("\n")
+
+
+
 le = LabelEncoder()
 le.fit(stars.Color)
 stars['Color_label'] = le.transform(stars.Color)
@@ -24,8 +31,10 @@ knn.fit(X, y)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.25, random_state=42)
 
 knn.fit(X_train, y_train)
+score=knn.score(X_test, y_test)
+print("Accuracy:", "{:.0%}".format(round(score,2)))
 
-print(knn.score(X_test, y_test))
+
 
 print(stars['Color'].unique())
 
