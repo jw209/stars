@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
@@ -49,10 +50,11 @@ for k in k_range:
     knn.fit(X_train, y_train)
     scores.append(knn.score(X_test, y_test))
 
-# create and show temperature and color scatter plot
+# create and show temperature and color bar plot
 fig, ax = plt.subplots()
 fig.canvas.manager.set_window_title('Temperature & Color')
-ax.scatter(stars['Temperature'], stars['Color'])
-plt.gcf().subplots_adjust(bottom=0.15, left=0.22)
+stars.groupby('Color')['Temperature'].mean().plot.bar()
+plt.gcf().subplots_adjust(bottom=0.25, left=0.22)
+plt.ylabel('Average Temperature (K)')
 
 plt.show()
