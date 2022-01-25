@@ -4,15 +4,21 @@ import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+from sklearn.linear_model import SGDClassifier
+import pylab
 
 stars = pd.read_csv('Stars.csv')
 stars.head()
+
+print(stars)
 
 print("Total number of attributes:", stars.shape[1], "\n")
 print("Data set attributes: ")
 print(list(stars.columns))
 print("\n")
 
+Type_label = {0: 'Red Dwarf', 1: 'Brown Dwarf',
+              2: 'White Dwarf', 3: 'Main Sequence', 4: 'Super Giants', 5: 'Hyper Giants'}
 
 
 le = LabelEncoder()
@@ -24,19 +30,16 @@ stars['Spectral_class_label'] = le.transform(stars.Spectral_Class)
 X = stars[['Temperature', 'L', 'R', 'A_M', 'Color_label', 'Spectral_class_label']]
 y = stars['Type']
 
-knn = KNeighborsClassifier(n_neighbors=3)
+knn = KNeighborsClassifier(n_neighbors=3, metric='euclidean')
 
 knn.fit(X, y)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.25, random_state=42)
 
+print("kNN using 'Euclidean Distance'")
 knn.fit(X_train, y_train)
-score=knn.score(X_test, y_test)
-print("Accuracy:", "{:.0%}".format(round(score,2)))
-
-
-
-print(stars['Color'].unique())
+score = knn.score(X_test, y_test)
+print("Accuracy :", "{:.0%}".format(round(score, 2)))
 
 k_range = range(1, 20)
 scores = []
@@ -46,15 +49,10 @@ for k in k_range:
     knn.fit(X_train, y_train)
     scores.append(knn.score(X_test, y_test))
 
-plt.style.use('_mpl-gallery')
-
+# create and show temperature and color scatter plot
 fig, ax = plt.subplots()
-fig1, bx = plt.subplots()
-
-bx.bar(stars['Type'].unique(), len(stars['Type'].unique()), width=1, edgecolor="white", linewidth=0.7)
-
-# temperature and color scatter plot
+fig.canvas.manager.set_window_title('Temperature & Color')
 ax.scatter(stars['Temperature'], stars['Color'])
-plt.gcf().subplots_adjust(bottom=0.15, left=0.15)
+plt.gcf().subplots_adjust(bottom=0.15, left=0.22)
 
 plt.show()
