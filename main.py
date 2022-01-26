@@ -1,12 +1,9 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from sklearn.linear_model import SGDClassifier
-import pylab
 
 stars = pd.read_csv('Stars.csv')
 stars.head()
@@ -52,9 +49,13 @@ for k in k_range:
 
 # create and show temperature and color bar plot
 fig, ax = plt.subplots()
-fig.canvas.manager.set_window_title('Temperature & Color')
 stars.groupby('Color')['Temperature'].mean().plot.bar()
 plt.gcf().subplots_adjust(bottom=0.25, left=0.22)
 plt.ylabel('Average Temperature (K)')
+
+# create and show class distribution
+plt.figure()
+bx = sns.scatterplot(data=stars, x=X['Temperature'], y=X['A_M'], hue='Label', size=X['R'])
+bx.set(xlabel='Temperature (K)', ylabel='Absolute Magnitude')
 
 plt.show()
