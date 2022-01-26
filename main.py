@@ -60,7 +60,7 @@ plt.gcf().subplots_adjust(bottom=0.25, left=0.22)
 plt.ylabel('Average Temperature (K)')
 
 # create and show class distribution
-fig1, bx = sns.scatterplot(data = stars, x = X['Temperature'], y = X['A_M'], hue = 'Label', size= X['R'])
+bx = sns.scatterplot(data = stars, x = X['Temperature'], y = X['A_M'], hue = 'Label', size= X['R'])
 # fig1.canvas.manager.set_window_title('Class distribution')
 bx.set(xlabel='Temperature (K)', ylabel='Absolute Magnitude')
 
