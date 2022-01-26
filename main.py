@@ -58,4 +58,18 @@ plt.figure()
 bx = sns.scatterplot(data=stars, x=X['Temperature'], y=X['A_M'], hue='Label', size=X['R'])
 bx.set(xlabel='Temperature (K)', ylabel='Absolute Magnitude')
 
-plt.show()
+#create data frames of specific star types
+red_dwarf = stars.where(stars['Type'] == 0)
+brown_dwarf = stars.where(stars['Type'] == 1)
+white_dwarf = stars.where(stars['Type'] == 2)
+main_sequence = stars.where(stars['Type'] == 3)
+super_giants = stars.where(stars['Type'] == 4)
+hyper_giants = stars.where(stars['Type'] == 5)
+
+#print instance and class
+print("Red Dwarf:",red_dwarf['Type'].count())
+print("Bronw Dwarf:",brown_dwarf['Type'].count())
+print("White Dwarf:",white_dwarf['Type'].count())
+print("Main Sequence:",main_sequence['Type'].count())
+print("Super Giants:",super_giants['Type'].count())
+print("Hyper Giants:",hyper_giants['Type'].count())
