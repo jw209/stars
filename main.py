@@ -8,14 +8,12 @@ from sklearn.preprocessing import LabelEncoder
 stars = pd.read_csv('Stars.csv')
 stars.head()
 
-
 print("Total number of attributes:", stars.shape[1], "\n")
 print("Data set attributes: ")
 print(list(stars.columns))
 print("\n")
 
-
-#create data frames of specific star types
+# create data frames of specific star types
 red_dwarf = stars.where(stars['Type'] == 0)
 brown_dwarf = stars.where(stars['Type'] == 1)
 white_dwarf = stars.where(stars['Type'] == 2)
@@ -23,7 +21,7 @@ main_sequence = stars.where(stars['Type'] == 3)
 super_giants = stars.where(stars['Type'] == 4)
 hyper_giants = stars.where(stars['Type'] == 5)
 
-#print instance and class
+# print instance and class
 print("Stars instance class:")
 print("Red Dwarf:",red_dwarf['Type'].count())
 print("Bronw Dwarf:",brown_dwarf['Type'].count())
@@ -32,10 +30,8 @@ print("Main Sequence:",main_sequence['Type'].count())
 print("Super Giants:",super_giants['Type'].count())
 print("Hyper Giants:",hyper_giants['Type'].count(),"\n")
 
-
 Type_label = {0: 'Red Dwarf', 1: 'Brown Dwarf',
               2: 'White Dwarf', 3: 'Main Sequence', 4: 'Super Giants', 5: 'Hyper Giants'}
-
 
 le = LabelEncoder()
 le.fit(stars.Color)
@@ -59,7 +55,6 @@ print("Accuracy :", "{:.0%}".format(round(score, 2)))
 
 k_range = range(1, 20)
 scores = []
-
 for k in k_range:
     knn = KNeighborsClassifier(n_neighbors=k)
     knn.fit(X_train, y_train)
