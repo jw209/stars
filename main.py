@@ -6,6 +6,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.linear_model import SGDClassifier
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.colors import ListedColormap
 import pylab
 
 stars = pd.read_csv('Stars.csv')
@@ -56,5 +58,10 @@ fig.canvas.manager.set_window_title('Temperature & Color')
 stars.groupby('Color')['Temperature'].mean().plot.bar()
 plt.gcf().subplots_adjust(bottom=0.25, left=0.22)
 plt.ylabel('Average Temperature (K)')
+
+# create and show class distribution
+fig1, bx = sns.scatterplot(data = stars, x = X['Temperature'], y = X['A_M'], hue = 'Label', size= X['R'])
+# fig1.canvas.manager.set_window_title('Class distribution')
+bx.set(xlabel='Temperature (K)', ylabel='Absolute Magnitude')
 
 plt.show()
