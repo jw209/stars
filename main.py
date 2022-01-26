@@ -60,15 +60,60 @@ for k in k_range:
     knn.fit(X_train, y_train)
     scores.append(knn.score(X_test, y_test))
 
+plt.figure()
+plt.xlabel('k')
+plt.ylabel('accuracy')
+plt.scatter(k_range, scores)
+plt.xticks([0, 5, 10, 15, 20])
+
 # create and show temperature and color bar plot
 fig, ax = plt.subplots()
 stars.groupby('Color')['Temperature'].mean().plot.bar()
 plt.gcf().subplots_adjust(bottom=0.25, left=0.22)
 plt.ylabel('Average Temperature (K)')
 
+# create temperature and star type bar plot
+fig1, cx = plt.subplots()
+stars.groupby('Type')['Temperature'].mean().plot.bar()
+plt.gcf().subplots_adjust(bottom=0.25, left=0.22)
+plt.ylabel('Average Temperature (K)')
+
+# create lumonsity and star type bar plot
+fig2, dx = plt.subplots()
+stars.groupby('Type')['L'].mean().plot.bar()
+plt.gcf().subplots_adjust(bottom=0.25, left=0.22)
+plt.ylabel('Relative lumonisty (W)')
+
+# create radius and star type bar plot
+fig3, ex = plt.subplots()
+stars.groupby('Type')['R'].mean().plot.bar()
+plt.gcf().subplots_adjust(bottom=0.25, left=0.22)
+plt.ylabel('Relative Radius (m)')
+
+# create absolute magnitude and star type bar plot
+fig4, fx = plt.subplots()
+stars.groupby('Type')['A_M'].mean().plot.bar()
+plt.gcf().subplots_adjust(bottom=0.25, left=0.22)
+plt.ylabel('Absolute Magnitude (Mv)')
+
 # create and show class distribution
 plt.figure()
 bx = sns.scatterplot(data=stars, x=X['Temperature'], y=X['A_M'], hue='Label', size=X['R'])
 bx.set(xlabel='Temperature (K)', ylabel='Absolute Magnitude')
+
+# create data frames of specific star types
+red_dwarf = stars.where(stars['Type'] == 0)
+brown_dwarf = stars.where(stars['Type'] == 1)
+white_dwarf = stars.where(stars['Type'] == 2)
+main_sequence = stars.where(stars['Type'] == 3)
+super_giants = stars.where(stars['Type'] == 4)
+hyper_giants = stars.where(stars['Type'] == 5)
+
+print('\nDescribing red dwarf stars: \n', red_dwarf.describe())
+print('\nDescribing brown dwarf stars: \n', brown_dwarf.describe())
+print('\nDescribing white dwarf stars: \n', white_dwarf.describe())
+print('\nDescribing main sequence stars: \n', main_sequence.describe())
+print('\nDescribing super giant stars: \n', super_giants.describe())
+print('\nDescribing hyper giant stars: \n', hyper_giants.describe())
 
 plt.show()
