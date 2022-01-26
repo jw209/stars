@@ -47,11 +47,41 @@ for k in k_range:
     knn.fit(X_train, y_train)
     scores.append(knn.score(X_test, y_test))
 
+plt.figure()
+plt.xlabel('k')
+plt.ylabel('accuracy')
+plt.scatter(k_range, scores)
+plt.xticks([0, 5, 10, 15, 20])
+
 # create and show temperature and color bar plot
 fig, ax = plt.subplots()
 stars.groupby('Color')['Temperature'].mean().plot.bar()
 plt.gcf().subplots_adjust(bottom=0.25, left=0.22)
 plt.ylabel('Average Temperature (K)')
+
+# create temperature and star type bar plot
+fig1, cx = plt.subplots()
+stars.groupby('Type')['Temperature'].mean().plot.bar()
+plt.gcf().subplots_adjust(bottom=0.25, left=0.22)
+plt.ylabel('Average Temperature (K)')
+
+# create lumonsity and star type bar plot
+fig2, dx = plt.subplots()
+stars.groupby('Type')['L'].mean().plot.bar()
+plt.gcf().subplots_adjust(bottom=0.25, left=0.22)
+plt.ylabel('Relative lumonisty (W)')
+
+# create radius and star type bar plot
+fig3, ex = plt.subplots()
+stars.groupby('Type')['R'].mean().plot.bar()
+plt.gcf().subplots_adjust(bottom=0.25, left=0.22)
+plt.ylabel('Relative Radius (m)')
+
+# create absolute magnitude and star type bar plot
+fig4, fx = plt.subplots()
+stars.groupby('Type')['A_M'].mean().plot.bar()
+plt.gcf().subplots_adjust(bottom=0.25, left=0.22)
+plt.ylabel('Absolute Magnitude (Mv)')
 
 # create and show class distribution
 plt.figure()
