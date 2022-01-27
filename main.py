@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn import metrics
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
@@ -54,17 +55,19 @@ score = knn.score(X_test, y_test)
 print("Accuracy :", "{:.0%}".format(round(score, 2)))
 
 k_range = range(1, 20)
-scores = []
+scores = {}
+scores_list = []
 for k in k_range:
     knn = KNeighborsClassifier(n_neighbors=k)
     knn.fit(X_train, y_train)
-    scores.append(knn.score(X_test, y_test))
+    y_pred = knn.predict(X_test)
+    scores[k] = metrics.accuracy_score(y_test, y_pred)
+    scores_list.append(metrics.accuracy_score(y_test, y_pred))
 
-plt.figure()
-plt.xlabel('k')
-plt.ylabel('accuracy')
-plt.scatter(k_range, scores)
-plt.xticks([0, 5, 10, 15, 20])
+# create and show accuracy vs k-value plot
+plt.plot(k_range, scores_list)
+plt.xlabel('Value of k for kNN')
+plt.ylabel('Testing Accuracy')
 
 # create and show temperature and color bar plot
 fig, ax = plt.subplots()
