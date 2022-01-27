@@ -71,8 +71,9 @@ plt.xlabel('Value of k for kNN')
 plt.ylabel('Testing Accuracy')
 
 cm = confusion_matrix(y_test, y_pred)
-disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+disp = ConfusionMatrixDisplay(cm)
 disp.plot()
+disp.ax_.set(xlabel='Predicted', ylabel='True', title='Star Type Classifier Confusion Matrix')
 
 print(cm)
 
