@@ -70,6 +70,7 @@ plt.plot(k_range, scores_list)
 plt.xlabel('Value of k for kNN')
 plt.ylabel('Testing Accuracy')
 
+# create and show confusion matrix for star classifier
 cm = confusion_matrix(y_test, y_pred)
 disp = ConfusionMatrixDisplay(cm)
 disp.plot()
