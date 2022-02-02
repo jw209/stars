@@ -6,8 +6,11 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+from statistics import mode
 
 stars = pd.read_csv('Stars.csv')
+# cols_to_norm = ['Temperature', 'L', 'R', 'A_M']
+# stars[cols_to_norm] = stars[cols_to_norm].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
 stars.head()
 
 print("Total number of attributes:", stars.shape[1], "\n")
@@ -126,5 +129,6 @@ print('\nDescribing white dwarf stars: \n', white_dwarf.describe())
 print('\nDescribing main sequence stars: \n', main_sequence.describe())
 print('\nDescribing super giant stars: \n', super_giants.describe())
 print('\nDescribing hyper giant stars: \n', hyper_giants.describe())
+# print(hyper_giants.mode(numeric_only=True))
 
 plt.show()
