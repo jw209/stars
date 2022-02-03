@@ -59,7 +59,7 @@ k_range = range(1, 20)
 scores = {}
 scores_list = []
 for k in k_range:
-    knn = KNeighborsClassifier(n_neighbors=k)
+    knn = KNeighborsClassifier(n_neighbors=k, metric='manhattan')
     knn.fit(X_train, y_train)
     y_pred = knn.predict(X_test)
     scores[k] = metrics.accuracy_score(y_test, y_pred)
@@ -71,12 +71,14 @@ plt.xlabel('Value of k for kNN')
 plt.ylabel('Testing Accuracy')
 
 # create and show confusion matrix for star classifier
-cm = confusion_matrix(y_test, y_pred)
-disp = ConfusionMatrixDisplay(cm)
-disp.plot()
-disp.ax_.set(xlabel='Predicted', ylabel='True', title='Star Type Classifier Confusion Matrix')
-
-print(cm)
+for k in range(1, 4):
+    knn = KNeighborsClassifier(n_neighbors=k, metric='manhattan')
+    knn.fit(X_train, y_train)
+    y_pred = knn.predict(X_test)
+    cm = confusion_matrix(y_test, y_pred)
+    disp = ConfusionMatrixDisplay(cm)
+    disp.plot()
+    disp.ax_.set(xlabel='Predicted', ylabel='True', title=f"Star Type Classifier Confusion Matrix knn={k}")
 
 # create and show temperature and color bar plot
 fig, ax = plt.subplots()
