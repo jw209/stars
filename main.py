@@ -12,12 +12,14 @@ stars = pd.read_csv('Stars.csv')
 cols_to_norm = ['Temperature', 'L', 'R', 'A_M']
 stars[cols_to_norm] = stars[cols_to_norm].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
 stars.head()
+
+print("Are there duplicates?")
 print(stars.duplicated())
+print("No duplicates\n")
 
 print("Total number of attributes:", stars.shape[1]-1, "\n")
 print("Data set attributes: ")
 print(list(stars.columns))
-print("\n")
 
 # create data frames of specific star types
 red_dwarf = stars.where(stars['Type'] == 0)
@@ -30,11 +32,13 @@ hyper_giants = stars.where(stars['Type'] == 5)
 # print instance and class
 print("Stars instance class:")
 print("Red Dwarf:",red_dwarf['Type'].count())
-print("Bronw Dwarf:",brown_dwarf['Type'].count())
+print("Brown Dwarf:",brown_dwarf['Type'].count())
 print("White Dwarf:",white_dwarf['Type'].count())
 print("Main Sequence:",main_sequence['Type'].count())
 print("Super Giants:",super_giants['Type'].count())
-print("Hyper Giants:",hyper_giants['Type'].count(),"\n")
+print("Hyper Giants:",hyper_giants['Type'].count(), "\n")
+
+print("There are 40 instances of each star type. The distribution is even.")
 
 Type_label = {0: 'Red Dwarf', 1: 'Brown Dwarf',
               2: 'White Dwarf', 3: 'Main Sequence', 4: 'Super Giants', 5: 'Hyper Giants'}
@@ -74,15 +78,18 @@ plt.plot(k_range, scores_list)
 plt.xlabel('Value of k for kNN')
 plt.ylabel('Testing Accuracy')
 
+distance_metrics = {0: 'chebyshev', 1: 'euclidean', 2: 'manhattan'}
+
 # create and show confusion matrix for star classifier
-for k in range(1, 4):
-    knn = KNeighborsClassifier(n_neighbors=k, metric='manhattan')
+for k in range(0, 3):
+    knn = KNeighborsClassifier(n_neighbors=3, metric=distance_metrics[k])
     knn.fit(X_train, y_train)
     y_pred = knn.predict(X_test)
     cm = confusion_matrix(y_test, y_pred)
     disp = ConfusionMatrixDisplay(cm)
     disp.plot()
-    disp.ax_.set(xlabel='Predicted', ylabel='True', title=f"Star Type Classifier Confusion Matrix knn={k}")
+    disp.ax_.set(xlabel='Predicted', ylabel='True',
+                 title=f"Star Type Classifier Confusion Matrix: {distance_metrics[k]} distance")
 
 # create and show temperature and color bar plot
 fig, ax = plt.subplots()
@@ -119,6 +126,10 @@ plt.figure()
 bx = sns.scatterplot(data=stars, x=X['Temperature'], y=X['A_M'], hue='Label', size=X['R'])
 bx.set(xlabel='Temperature (K)', ylabel='Absolute Magnitude')
 
+plt.figure()
+bx = sns.scatterplot(data=stars, x=X['L'], y=X['R'], hue='Label')
+bx.set(xlabel='Relative Luminosity', ylabel='Relative Radius')
+
 # create data frames of specific star types
 red_dwarf = stars.where(stars['Type'] == 0)
 brown_dwarf = stars.where(stars['Type'] == 1)
@@ -137,8 +148,9 @@ print('\nDescribing hyper giant stars: \n', hyper_giants.describe())
 
 # testing real world star (we are trying to see if Betelgeuse is a super giant)
 # spectral type: M1-M2, A_M: -5.85, Temperature: 3600+-200, L: 126,000, R: 764
+unknown = pd.DataFrame([[3600, 126000, 764, -5.85, 'Red', 'M']],
+                       columns=['Temperature', 'L', 'R', 'A_M', 'Color', 'Spectral_Class'])
 
-unknown = pd.DataFrame([[3600, 126000, 764, -5.85, 'Red', 'M']], columns=['Temperature', 'L', 'R', 'A_M', 'Color', 'Spectral_Class'])
 le.fit(unknown.Color)
 unknown['Color'] = le.transform(unknown.Color)
 le.fit(unknown.Spectral_Class)
@@ -147,15 +159,5 @@ unknown['Spectral_Class'] = le.transform(unknown.Spectral_Class)
 star_prediction = knn.predict(unknown)
 print('The unknown star you are predicting is apart of: ', Type_label[star_prediction[0]], ' star type')
 print(knn.predict_proba(unknown))
-
-unknown2 = pd.DataFrame([[3150, 0.00035, 0.14, 15, 'Red', 'M']], columns=['Temperature', 'L', 'R', 'A_M', 'Color', 'Spectral_Class'])
-le.fit(unknown2.Color)
-unknown2['Color'] = le.transform(unknown2.Color)
-le.fit(unknown2.Spectral_Class)
-unknown2['Spectral_Class'] = le.transform(unknown2.Spectral_Class)
-
-star_prediction = knn.predict(unknown2)
-print('The unknown star you are predicting is apart of: ', Type_label[star_prediction[0]], ' star type')
-print(knn.predict_proba(unknown2))
 
 plt.show()
