@@ -9,9 +9,10 @@ from sklearn.preprocessing import LabelEncoder
 from statistics import mode
 
 stars = pd.read_csv('Stars.csv')
-# cols_to_norm = ['Temperature', 'L', 'R', 'A_M']
-# stars[cols_to_norm] = stars[cols_to_norm].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
+cols_to_norm = ['Temperature', 'L', 'R', 'A_M']
+stars[cols_to_norm] = stars[cols_to_norm].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
 stars.head()
+print(stars.duplicated())
 
 print("Total number of attributes:", stars.shape[1]-1, "\n")
 print("Data set attributes: ")
@@ -51,7 +52,7 @@ knn = KNeighborsClassifier(n_neighbors=3, metric='manhattan')
 
 knn.fit(X, y)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.25, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.35, random_state=42)
 
 print("kNN using 'Manhattan Distance'")
 knn.fit(X_train, y_train)
@@ -146,5 +147,15 @@ unknown['Spectral_Class'] = le.transform(unknown.Spectral_Class)
 star_prediction = knn.predict(unknown)
 print('The unknown star you are predicting is apart of: ', Type_label[star_prediction[0]], ' star type')
 print(knn.predict_proba(unknown))
+
+unknown2 = pd.DataFrame([[3150, 0.00035, 0.14, 15, 'Red', 'M']], columns=['Temperature', 'L', 'R', 'A_M', 'Color', 'Spectral_Class'])
+le.fit(unknown2.Color)
+unknown2['Color'] = le.transform(unknown2.Color)
+le.fit(unknown2.Spectral_Class)
+unknown2['Spectral_Class'] = le.transform(unknown2.Spectral_Class)
+
+star_prediction = knn.predict(unknown2)
+print('The unknown star you are predicting is apart of: ', Type_label[star_prediction[0]], ' star type')
+print(knn.predict_proba(unknown2))
 
 plt.show()
